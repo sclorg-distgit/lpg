@@ -1,0 +1,14 @@
+--- lpg-generator-cpp/src/tuple.h.orig	2014-06-16 17:25:54.678811180 +0100
++++ lpg-generator-cpp/src/tuple.h	2014-06-16 17:29:37.832188144 +0100
+@@ -49,7 +49,10 @@
+         if (new_size > size)
+         {
+             T *old_info = info;
+-            info = (T *) memmove(new T[new_size], old_info, size * sizeof(T));
++            if (size > 0)
++                info = (T *) memmove(new T[new_size], old_info, size * sizeof(T));
++            else
++                info = (T *) new T[new_size];
+             delete [] old_info;
+         }
+         size = new_size;

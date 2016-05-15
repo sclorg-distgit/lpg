@@ -2,14 +2,15 @@
 %{!?scl:%global pkg_name %{name}}
 %{?java_common_find_provides_and_requires}
 
+%global baserelease 2
+
 %global    _version 2.0.17
 %global    _compat_version 1.1.0
 
 Name:      %{?scl_prefix}lpg
 Version:   %{_version}
-Release:   17.2%{?dist}
+Release:   19.%{baserelease}%{?dist}
 Summary:   LALR Parser Generator
-Group:     Development/Libraries
 # although the text of the licence isn't distributed with some of the source,
 # the author has exlicitly stated that everything is covered under the EPL
 # see: http://sourceforge.net/forum/forum.php?thread_id=3277926&forum_id=523519
@@ -49,10 +50,9 @@ inheritance.
 
 %package       java
 Summary:       Java runtime library for LPG
-Group:         Development/Libraries
 
 BuildArch:     noarch
-
+Provides:      %{?scl_prefix}osgi(lpg.runtime.java) = 2.0.17
 
 BuildRequires: %{?scl_prefix_java_common}jpackage-utils
 BuildRequires: %{?scl_prefix_java_common}ant-apache-regexp
@@ -66,10 +66,9 @@ Java runtime library for parsers generated with the LALR Parser Generator
 %package       java-compat
 Version:       %{_compat_version}
 Summary:       Compatibility Java runtime library for LPG 1.x
-Group:         Development/Libraries
 
 BuildArch:     noarch
-
+Provides:      %{?scl_prefix}osgi(net.sourceforge.lpg.lpgjavaruntime) = 1.1.0
 
 BuildRequires: %{?scl_prefix_java_common}jpackage-utils
 BuildRequires: %{?scl_prefix_java_common}ant
@@ -82,6 +81,7 @@ Generator (LPG) 1.x.
 
 %prep
 %{?scl:scl enable %{scl_maven} %{scl} - << "EOF"}
+set -e -x
 %setup -q -T -c -n %{pkg_name}-%{version}
 
 # because you can't use setup to unzip to subdirectories when your source
@@ -105,6 +105,7 @@ cp -p %{SOURCE5} lpgdistribution/MANIFEST.MF
 
 %build
 %{?scl:scl enable %{scl_maven} %{scl} - << "EOF"}
+set -e -x
 # build java stuff
 (cd lpg-java-runtime && ant -f exportPlugin.xml)
 
@@ -128,6 +129,7 @@ popd
 
 %install
 %{?scl:scl enable %{scl_maven} %{scl} - << "EOF"}
+set -e -x
 install -pD -T lpg-java-runtime/%{pkg_name}runtime.jar \
   %{buildroot}%{_javadir}/%{pkg_name}runtime.jar
 install -pD -T lpgdistribution/%{pkg_name}javaruntime.jar \
@@ -150,6 +152,20 @@ install -pD -T lpg-generator-cpp/bin/%{pkg_name}-linux_x86 \
 %{_javadir}/%{pkg_name}javaruntime.jar
 
 %changelog
+* Mon Feb 29 2016 Mat Booth <mat.booth@redhat.com> - 2.0.17-19.2
+- Rebuild 2016-02-29
+
+* Tue Feb 16 2016 Mat Booth <mat.booth@redhat.com> - 2.0.17-19.1
+- Import latest from Fedora
+- Add missing osgi provides
+
+* Thu Feb 04 2016 Fedora Release Engineering <releng@fedoraproject.org> - 2.0.17-19
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_24_Mass_Rebuild
+
+* Fri Jul 10 2015 Mat Booth <mat.booth@redhat.com> - 2.0.17-18
+- Add Wno-strict-overflow flag to remove unnecessary warning about subtracting
+  one from an index value.
+
 * Fri Jul 10 2015 Mat Booth <mat.booth@redhat.com> - 2.0.17-17.2
 - Add Wno-strict-overflow flag to remove unnecessary warning about subtracting
   one from an index value.

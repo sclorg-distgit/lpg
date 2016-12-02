@@ -2,7 +2,7 @@
 %{!?scl:%global pkg_name %{name}}
 %{?java_common_find_provides_and_requires}
 
-%global baserelease 2
+%global baserelease 3
 
 %global    _version 2.0.17
 %global    _compat_version 1.1.0
@@ -58,6 +58,7 @@ BuildRequires: %{?scl_prefix_java_common}jpackage-utils
 BuildRequires: %{?scl_prefix_java_common}ant-apache-regexp
 
 Requires:      %{?scl_prefix_java_common}jpackage-utils
+Requires:      %{?scl_prefix}runtime
 
 %description   java
 Java runtime library for parsers generated with the LALR Parser Generator
@@ -74,6 +75,7 @@ BuildRequires: %{?scl_prefix_java_common}jpackage-utils
 BuildRequires: %{?scl_prefix_java_common}ant
 
 Requires:      %{?scl_prefix_java_common}jpackage-utils
+Requires:      %{?scl_prefix}runtime
 
 %description   java-compat
 Compatibility Java runtime library for parsers generated with the LALR Parser
@@ -152,6 +154,9 @@ install -pD -T lpg-generator-cpp/bin/%{pkg_name}-linux_x86 \
 %{_javadir}/%{pkg_name}javaruntime.jar
 
 %changelog
+* Fri Aug 12 2016 Mat Booth <mat.booth@redhat.com> - 2.0.17-19.3
+- Ensure package requires SCL runtime
+
 * Thu Jul 21 2016 Mat Booth <mat.booth@redhat.com> - 2.0.17-19.2
 - Add missing osgi provides
 
